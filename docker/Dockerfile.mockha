@@ -1,0 +1,18 @@
+# docker/Dockerfile.mockha
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source code for mock server
+COPY tests/mocks/mockHomeAssistantServer.ts ./mockServer.ts
+COPY tsconfig.json ./
+
+# Expose port
+EXPOSE 8123
+
+# Run mock server
+CMD ["npx", "ts-node", "mockServer.ts"]

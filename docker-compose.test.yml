@@ -1,0 +1,34 @@
+# docker-compose.test.yml
+version: '3.8'
+
+services:
+  # Mock Home Assistant server for testing
+  mockha:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.mockha
+    ports:
+      - "8123:8123"
+    networks:
+      - test-network
+
+  # Test runner
+  test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.test
+    depends_on:
+      - mockha
+    environment:
+      - NODE_ENV=test
+      - HASS_HOST=http://mockha:8123
+      - HASS_TOKEN=mock_token
+      - HASS_SOCKET_URL=ws://mockha:8123/api/websocket
+    volumes:
+      - ./coverage:/app/coverage
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
