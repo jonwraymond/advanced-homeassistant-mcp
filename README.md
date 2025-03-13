@@ -1,363 +1,215 @@
-# MCP Server for Home Assistant 🏠🤖
+# Advanced Home Assistant MCP Server with Test-Driven Development
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Bun](https://img.shields.io/badge/bun-%3E%3D1.0.26-black)](https://bun.sh) [![TypeScript](https://img.shields.io/badge/typescript-%5E5.0.0-blue.svg)](https://www.typescriptlang.org) [![smithery badge](https://smithery.ai/badge/@jango-blockchained/advanced-homeassistant-mcp)](https://smithery.ai/server/@jango-blockchained/advanced-homeassistant-mcp)
+[![Test](https://github.com/jonwraymond/advanced-homeassistant-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/jonwraymond/advanced-homeassistant-mcp/actions/workflows/test.yml)
 
-## Overview 🌐
+A powerful bridge between your Home Assistant instance and Language Learning Models (LLMs), enabling natural language control and monitoring of your smart home devices through the Model Context Protocol (MCP). This implementation follows test-driven development principles, ensuring high reliability and code quality.
 
-MCP (Model Context Protocol) Server is my lightweight integration tool for Home Assistant, providing a flexible interface for device management and automation. It's designed to be fast, secure, and easy to use. Built with Bun for maximum performance.
+## Features
 
-## Why Bun? 🚀
+- 🧪 **Test-Driven Development**: All features built using TDD approach
+- 🐳 **Docker Integration**: Containerized testing environment
+- 🤖 **Automation Management**: Create, update, and manage automations
+- 🔌 **Device Control**: Control Home Assistant devices through natural language
+- 📊 **State Monitoring**: Track and query device states
+- 🔐 **Secure**: Token-based authentication
+- 🎮 **MCP Tools**: Automation management through standardized MCP interfaces
 
-I chose Bun as the runtime for several key benefits:
+## Test-Driven Development Approach
 
-- ⚡ **Blazing Fast Performance**
-  - Up to 4x faster than Node.js
-  - Built-in TypeScript support
-  - Optimized file system operations
+This project follows a rigorous test-driven development cycle:
 
-- 🎯 **All-in-One Solution**
-  - Package manager (faster than npm/yarn)
-  - Bundler (no webpack needed)
-  - Test runner (built-in testing)
-  - TypeScript transpiler
+1. **Write Tests First**: All functionality is defined through tests before implementation
+2. **Red-Green-Refactor**: Tests guide implementation, ensuring all code is tested
+3. **Mocking**: Mock Home Assistant server for testing without a real instance
+4. **Docker Testing**: Containerized testing environment for consistency
+5. **CI/CD Integration**: GitHub Actions for automated testing on every push
 
-- 🔋 **Built-in Features**
-  - SQLite3 driver
-  - .env file loading
-  - WebSocket client/server
-  - File watcher
-  - Test runner
+## Project Structure
 
-- 💾 **Resource Efficient**
-  - Lower memory usage
-  - Faster cold starts
-  - Better CPU utilization
-
-- 🔄 **Node.js Compatibility**
-  - Runs most npm packages
-  - Compatible with Express/Fastify
-  - Native Node.js APIs
-
-## Core Features ✨
-
-- 🔌 Basic device control via REST API
-- 📡 WebSocket/Server-Sent Events (SSE) for state updates
-- 🤖 Simple automation rule management
-- 🔐 JWT-based authentication
-- 🎤 Optional speech features:
-  - 🗣️ Wake word detection ("hey jarvis", "ok google", "alexa")
-  - 🎯 Speech-to-text using fast-whisper
-  - 🌍 Multiple language support
-  - 🚀 GPU acceleration support
-
-## System Architecture 📊
-
-```mermaid
-flowchart TB
-    subgraph Client["Client Applications"]
-        direction TB
-        Web["Web Interface"]
-        Mobile["Mobile Apps"]
-        Voice["Voice Control"]
-    end
-
-    subgraph MCP["MCP Server"]
-        direction TB
-        API["REST API"]
-        WS["WebSocket/SSE"]
-        Auth["Authentication"]
-        
-        subgraph Speech["Speech Processing (Optional)"]
-            direction TB
-            Wake["Wake Word Detection"]
-            STT["Speech-to-Text"]
-            
-            subgraph STT_Options["STT Options"]
-                direction LR
-                Whisper["Whisper"]
-                FastWhisper["Fast Whisper"]
-            end
-            
-            Wake --> STT
-            STT --> STT_Options
-        end
-    end
-
-    subgraph HA["Home Assistant"]
-        direction TB
-        HASS_API["HASS API"]
-        HASS_WS["HASS WebSocket"]
-        Devices["Smart Devices"]
-    end
-
-    Client --> MCP
-    MCP --> HA
-    HA --> Devices
-
-    style Speech fill:#f9f,stroke:#333,stroke-width:2px
-    style STT_Options fill:#bbf,stroke:#333,stroke-width:1px
+```
+home-assistant-mcp/
+├── src/
+│   ├── core/              # Core functionality
+│   │   └── homeAssistantConnection.ts
+│   ├── services/          # Service implementations
+│   │   └── automationService.ts
+│   ├── tools/             # MCP tools
+│   │   └── automationTool.ts
+│   ├── controllers/       # API controllers
+│   ├── models/            # Data models
+│   ├── utils/             # Utility functions
+│   └── index.ts           # Main entry point
+├── tests/
+│   ├── unit/             # Unit tests
+│   │   ├── core/
+│   │   ├── services/ 
+│   │   └── tools/
+│   ├── integration/      # Integration tests
+│   ├── e2e/              # End-to-end tests
+│   └── mocks/            # Test mocks
+│       └── mockHomeAssistantServer.ts
+├── docker/
+│   ├── Dockerfile.test   # Testing Dockerfile
+│   └── Dockerfile.mockha # Mock Home Assistant Dockerfile
+├── .github/
+│   └── workflows/        # GitHub Actions workflows
+│       └── test.yml      # CI testing pipeline
+├── scripts/
+│   └── run-tests-in-docker.sh # Script to run tests in Docker
+├── docker-compose.test.yml    # Docker Compose for testing
+├── package.json               # Node.js dependencies
+├── tsconfig.json              # TypeScript configuration
+├── jest.config.js             # Jest testing configuration
+└── README.md                  # Project documentation
 ```
 
-## Prerequisites 📋
+## Prerequisites
 
-- 🚀 [Bun runtime](https://bun.sh) (v1.0.26+)
-- 🏡 [Home Assistant](https://www.home-assistant.io/) instance
-- 🐳 Docker (optional, recommended for deployment)
-- 🖥️ Node.js 18+ (optional, for speech features)
-- 🎮 NVIDIA GPU with CUDA support (optional, for faster speech processing)
+- **Node.js** 20+ or **Bun** runtime
+- **Docker** (for containerized testing)
+- A running **Home Assistant** instance
+- Home Assistant long-lived access token
 
-## Quick Start 🚀
+## Quick Start
 
-1. Clone my repository:
-```bash
-git clone https://github.com/jango-blockchained/homeassistant-mcp.git
-cd homeassistant-mcp
-```
-
-2. Set up the environment:
-```bash
-# Make my setup script executable
-chmod +x scripts/setup-env.sh
-
-# Run setup (defaults to development)
-./scripts/setup-env.sh
-
-# Or specify an environment:
-NODE_ENV=production ./scripts/setup-env.sh
-
-# Force override existing files:
-./scripts/setup-env.sh --force
-```
-
-3. Configure your settings:
-- Edit `.env` file with your Home Assistant details
-- Required: Add your `HASS_TOKEN` (long-lived access token)
-
-4. Build and launch with Docker:
-```bash
-# Build options:
-# Standard build
-./docker-build.sh
-
-# Build with speech support
-./docker-build.sh --speech
-
-# Build with speech and GPU support
-./docker-build.sh --speech --gpu
-
-# Launch:
-docker compose up -d
-
-# With speech features:
-docker compose -f docker-compose.yml -f docker-compose.speech.yml up -d
-```
-
-## Docker Build Options 🐳
-
-My Docker build script (`docker-build.sh`) supports different configurations:
-
-### 1. Standard Build
-```bash
-./docker-build.sh
-```
-- Basic MCP server functionality
-- REST API and WebSocket support
-- No speech features
-
-### 2. Speech-Enabled Build
-```bash
-./docker-build.sh --speech
-```
-- Includes wake word detection
-- Speech-to-text capabilities
-- Pulls required images:
-  - `onerahmet/openai-whisper-asr-webservice`
-  - `rhasspy/wyoming-openwakeword`
-
-### 3. GPU-Accelerated Build
-```bash
-./docker-build.sh --speech --gpu
-```
-- All speech features
-- CUDA GPU acceleration
-- Optimized for faster processing
-- Float16 compute type for better performance
-
-### Build Features
-- 🔄 Automatic resource allocation
-- 💾 Memory-aware building
-- 📊 CPU quota management
-- 🧹 Automatic cleanup
-- 📝 Detailed build logs
-- 📊 Build summary and status
-
-## Environment Configuration 🔧
-
-I've implemented a hierarchical configuration system:
-
-### File Structure 📁
-1. `.env.example` - My template with all options
-2. `.env` - Your configuration (copy from .env.example)
-3. Environment overrides:
-   - `.env.dev` - Development settings
-   - `.env.prod` - Production settings
-   - `.env.test` - Test settings
-
-### Loading Priority ⚡
-Files load in this order:
-1. `.env` (base config)
-2. Environment-specific file:
-   - `NODE_ENV=development` → `.env.dev`
-   - `NODE_ENV=production` → `.env.prod`
-   - `NODE_ENV=test` → `.env.test`
-
-Later files override earlier ones.
-
-## Speech Features Setup 🎤
-
-### Prerequisites
-1. 🐳 Docker installed and running
-2. 🎮 NVIDIA GPU with CUDA (optional)
-3. 💾 4GB+ RAM (8GB+ recommended)
-
-### Configuration
-1. Enable speech in `.env`:
-```bash
-ENABLE_SPEECH_FEATURES=true
-ENABLE_WAKE_WORD=true
-ENABLE_SPEECH_TO_TEXT=true
-WHISPER_MODEL_PATH=/models
-WHISPER_MODEL_TYPE=base
-```
-
-2. Choose your STT engine:
-```bash
-# For standard Whisper
-STT_ENGINE=whisper
-
-# For Fast Whisper (GPU recommended)
-STT_ENGINE=fast-whisper
-CUDA_VISIBLE_DEVICES=0  # Set GPU device
-```
-
-### Available Models 🤖
-Choose based on your needs:
-- `tiny.en`: Fastest, basic accuracy
-- `base.en`: Good balance (recommended)
-- `small.en`: Better accuracy, slower
-- `medium.en`: High accuracy, resource intensive
-- `large-v2`: Best accuracy, very resource intensive
-
-## Development 💻
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/jonwraymond/advanced-homeassistant-mcp.git
+cd advanced-homeassistant-mcp
+
 # Install dependencies
+npm install
+
+# Or with Bun
 bun install
-
-# Run in development mode
-bun run dev
-
-# Run tests
-bun test
-
-# Run with hot reload
-bun --hot run dev
-
-# Build for production
-bun build ./src/index.ts --target=bun
-
-# Run production build
-bun run start
 ```
 
-### Performance Comparison 📊
+### Running Tests
 
-| Operation | Bun | Node.js |
-|-----------|-----|---------|
-| Install Dependencies | ~2s | ~15s |
-| Cold Start | 300ms | 1000ms |
-| Build Time | 150ms | 4000ms |
-| Memory Usage | ~150MB | ~400MB |
+```bash
+# Run tests locally
+npm test
 
-## Documentation 📚
+# Run tests in Docker (recommended)
+chmod +x scripts/run-tests-in-docker.sh
+./scripts/run-tests-in-docker.sh
 
-### Core Documentation
-- [Configuration Guide](docs/configuration.md)
-- [API Documentation](docs/api.md)
-- [Troubleshooting](docs/troubleshooting.md)
+# Run tests with coverage
+npm run test:coverage
+```
 
-### Advanced Features
-- [Natural Language Processing](docs/nlp.md) - AI-powered automation analysis and control
-- [Custom Prompts Guide](docs/prompts.md) - Create and customize AI behavior
-- [Extras & Tools](docs/extras.md) - Additional utilities and advanced features
+### Running the Server
 
-### Extra Tools 🛠️
+```bash
+# Build the project
+npm run build
 
-I've included several powerful tools in the `extra/` directory to enhance your Home Assistant experience:
+# Start the server
+npm start
 
-1. **Home Assistant Analyzer CLI** (`ha-analyzer-cli.ts`)
-   - Deep automation analysis using AI models
-   - Security vulnerability scanning
-   - Performance optimization suggestions
-   - System health metrics
+# Development mode
+npm run dev
+```
 
-2. **Speech-to-Text Example** (`speech-to-text-example.ts`)
-   - Wake word detection
-   - Speech-to-text transcription
-   - Multiple language support
-   - GPU acceleration support
+## Configuration
 
-3. **Claude Desktop Setup** (`claude-desktop-macos-setup.sh`)
-   - Automated Claude Desktop installation for macOS
-   - Environment configuration
-   - MCP integration setup
+Create a `.env` file with the following variables:
 
-See [Extras Documentation](docs/extras.md) for detailed usage instructions and examples.
+```env
+# Home Assistant Configuration
+HASS_HOST=http://homeassistant.local:8123
+HASS_TOKEN=your_long_lived_access_token
+HASS_SOCKET_URL=ws://homeassistant.local:8123/api/websocket
 
-## Client Integration 🔗
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+```
 
-### Cursor Integration 🖱️
-Add to `.cursor/config/config.json`:
+## Using with MCP Clients
+
+### Claude Desktop Configuration
+
+Add the following to your Claude Desktop configuration:
+
 ```json
 {
   "mcpServers": {
-    "homeassistant-mcp": {
-      "command": "bun",
+    "homeassistant": {
+      "command": "npm",
       "args": ["run", "start"],
-      "cwd": "${workspaceRoot}",
+      "cwd": "path/to/advanced-homeassistant-mcp",
       "env": {
-        "NODE_ENV": "development"
+        "HASS_HOST": "http://homeassistant.local:8123",
+        "HASS_TOKEN": "your_long_lived_access_token",
+        "HASS_SOCKET_URL": "ws://homeassistant.local:8123/api/websocket"
       }
     }
   }
 }
 ```
 
-### Claude Desktop 💬
-Add to your Claude config:
+## API Endpoints
+
+### MCP Endpoint
+
+```http
+POST /mcp
+```
+
+Receives MCP tool requests and routes them to the appropriate handler.
+
+**Request Body:**
 ```json
 {
-  "mcpServers": {
-    "homeassistant-mcp": {
-      "command": "bun",
-      "args": ["run", "start", "--port", "8080"],
-      "env": {
-        "NODE_ENV": "production"
-      }
-    }
-  }
+  "tool": "automation",
+  "action": "list"
 }
 ```
 
-### Command Line 💻
-Windows users can use the provided script:
-1. Go to `scripts` directory
-2. Run `start_mcp.cmd`
+### Health Check
 
-## License 📄
+```http
+GET /health
+```
 
-MIT License. See [LICENSE](LICENSE) for details.
+Returns the server status and Home Assistant connection information.
 
-## Author 👨‍💻
+## Adding New Features
 
-Created by [jango-blockchained](https://github.com/jango-blockchained)
+To add new features, follow the TDD approach:
+
+1. **Write Tests**: Create test files in `tests/unit/` for your new functionality
+2. **Implement Features**: Write the minimum code to make tests pass
+3. **Run Tests**: Verify that all tests pass
+4. **Refactor**: Improve code quality while maintaining test coverage
+
+## Docker Testing Environment
+
+This project includes a full Docker testing environment with:
+
+- **Mock Home Assistant Server**: Simulates Home Assistant without requiring a real instance
+- **Test Container**: Runs tests against the mock server
+- **Isolated Network**: Ensures tests run in a clean environment
+
+To use it:
+
+```bash
+./scripts/run-tests-in-docker.sh
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b my-new-feature`)
+3. Write tests for your new feature
+4. Implement your feature to make tests pass
+5. Commit your changes (`git commit -am 'Add new feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create a new Pull Request
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file
