@@ -1,0 +1,22 @@
+# Dockerfile.test
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source code
+COPY tsconfig.json jest.config.js ./
+COPY src/ ./src/
+COPY tests/ ./tests/
+
+# Set environment variables
+ENV NODE_ENV=test
+ENV HASS_HOST=mock
+ENV HASS_TOKEN=mock_token
+ENV HASS_SOCKET_URL=ws://mockha:8123/api/websocket
+
+# Run tests with coverage
+CMD ["npm", "run", "test:coverage"]
